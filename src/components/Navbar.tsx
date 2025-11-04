@@ -7,7 +7,7 @@ import GithubIcon from "@/assets/github.png";
 import Linkedin from "@/assets/linkedin.png";
 import Instagram from "@/assets/instagram.png";
 import MessageCircle from "@/assets/whatsapp.png";
-import Discord from "@/assets/Discord.png";
+import Discord from "@/assets/Discord1.png";
 import Logo from "@/assets/logo.png";
 
 const Navbar = () => {
