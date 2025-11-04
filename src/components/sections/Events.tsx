@@ -28,7 +28,11 @@ import {
   Binary,
   ExternalLink,
   MapPin,
-  Video
+  Video,
+  Quote,
+  Github,
+  Linkedin,
+  Twitter
 } from "lucide-react";
 
 const sectionIcons: any = {
@@ -57,6 +61,226 @@ const FloatingElement = ({ children, delay = 0 }: { children: React.ReactNode; d
     {children}
   </motion.div>
 );
+
+// Testimonial Card Component
+const TestimonialCard = ({ 
+  testimonial, 
+  delay = 0 
+}: { 
+  testimonial: {
+    name: string;
+    role: string;
+    company: string;
+    content: string;
+    avatar: string;
+    rating: number;
+    social: {
+      github?: string;
+      linkedin?: string;
+      twitter?: string;
+    };
+  };
+  delay?: number;
+}) => (
+  <FloatingElement delay={delay}>
+    <motion.div
+      whileHover={{ scale: 1.02, y: -5 }}
+      className="group relative p-6 rounded-3xl bg-neutral-900/40 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer h-full"
+    >
+      {/* Quote Icon */}
+      <div className="absolute top-6 right-6 opacity-20 group-hover:opacity-30 transition-opacity">
+        <Quote className="w-8 h-8 text-purple-400" />
+      </div>
+
+      {/* Rating Stars */}
+      <div className="flex gap-1 mb-4">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`w-4 h-4 ${
+              i < testimonial.rating
+                ? "text-yellow-400 fill-yellow-400"
+                : "text-neutral-600"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Testimonial Content */}
+      <p className="text-neutral-300 leading-relaxed mb-6 line-clamp-5 group-hover:line-clamp-none transition-all">
+        "{testimonial.content}"
+      </p>
+
+      {/* Author Info */}
+      <div className="flex items-center gap-4">
+        <div className="relative">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+            <span className="text-white font-semibold text-sm">
+              {testimonial.avatar}
+            </span>
+          </div>
+          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-neutral-900"></div>
+        </div>
+        
+        <div className="flex-1 min-w-0">
+          <h4 className="font-semibold text-white truncate">{testimonial.name}</h4>
+          <p className="text-sm text-neutral-400 truncate">{testimonial.role}</p>
+          <p className="text-xs text-neutral-500 truncate">{testimonial.company}</p>
+        </div>
+      </div>
+
+      {/* Social Links */}
+      <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
+        {testimonial.social.github && (
+          <a href={testimonial.social.github} className="p-2 rounded-lg bg-neutral-800/60 hover:bg-neutral-700/60 transition-colors">
+            <Github className="w-3 h-3 text-neutral-400" />
+          </a>
+        )}
+        {testimonial.social.linkedin && (
+          <a href={testimonial.social.linkedin} className="p-2 rounded-lg bg-neutral-800/60 hover:bg-neutral-700/60 transition-colors">
+            <Linkedin className="w-3 h-3 text-neutral-400" />
+          </a>
+        )}
+        {testimonial.social.twitter && (
+          <a href={testimonial.social.twitter} className="p-2 rounded-lg bg-neutral-800/60 hover:bg-neutral-700/60 transition-colors">
+            <Twitter className="w-3 h-3 text-neutral-400" />
+          </a>
+        )}
+      </div>
+
+      {/* Hover Gradient Effect */}
+      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+    </motion.div>
+  </FloatingElement>
+);
+
+// Testimonials Grid Component
+const TestimonialsGrid = () => {
+  const testimonials = [
+    {
+      name: "Alex Chen",
+      role: "Full Stack Developer",
+      company: "TechCorp Inc.",
+      content: "The hackathons organized by this club transformed my coding skills. I went from beginner to landing my dream job in just 6 months! The community support is incredible.",
+      avatar: "AC",
+      rating: 5,
+      social: {
+        github: "https://github.com",
+        linkedin: "https://linkedin.com",
+        twitter: "https://twitter.com"
+      }
+    },
+    {
+      name: "Sarah Martinez",
+      role: "UI/UX Designer",
+      company: "DesignStudio",
+      content: "As a designer, I found amazing collaborators here. The workshops helped me understand developer workflows better, making me a more effective team member.",
+      avatar: "SM",
+      rating: 5,
+      social: {
+        linkedin: "https://linkedin.com",
+        twitter: "https://twitter.com"
+      }
+    },
+    {
+      name: "James Wilson",
+      role: "Data Scientist",
+      company: "DataInsights LLC",
+      content: "The machine learning study groups and project collaborations gave me practical experience that directly contributed to my career advancement. Highly recommended!",
+      avatar: "JW",
+      rating: 4,
+      social: {
+        github: "https://github.com",
+        linkedin: "https://linkedin.com"
+      }
+    },
+    {
+      name: "Maria Garcia",
+      role: "DevOps Engineer",
+      company: "CloudSystems",
+      content: "From weekly coding challenges to annual hackathons, this club provides continuous learning opportunities. The network I built here is priceless.",
+      avatar: "MG",
+      rating: 5,
+      social: {
+        github: "https://github.com",
+        linkedin: "https://linkedin.com",
+        twitter: "https://twitter.com"
+      }
+    },
+    {
+      name: "David Kim",
+      role: "Mobile Developer",
+      company: "AppVenture",
+      content: "The hands-on workshops and mentorship programs helped me transition from web to mobile development. The community is always willing to help.",
+      avatar: "DK",
+      rating: 5,
+      social: {
+        github: "https://github.com",
+        linkedin: "https://linkedin.com"
+      }
+    },
+    {
+      name: "Emily Zhang",
+      role: "Product Manager",
+      company: "InnovateLabs",
+      content: "Even as a non-technical member, I found immense value in understanding tech trends and connecting with talented developers for my projects.",
+      avatar: "EZ",
+      rating: 4,
+      social: {
+        linkedin: "https://linkedin.com",
+        twitter: "https://twitter.com"
+      }
+    }
+  ];
+
+  return (
+    <section className="max-w-6xl mx-auto px-6">
+      {/* <FloatingElement delay={0.3}>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent mb-4">
+            Community Testimonials
+          </h2>
+          <p className="text-neutral-400 text-lg max-w-2xl mx-auto">
+            Hear from our members about their experiences and success stories
+          </p>
+          <div className="w-24 h-1 mx-auto mt-4 rounded-full bg-gradient-to-r from-teal-500 to-blue-500" />
+        </div>
+      </FloatingElement>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {testimonials.map((testimonial, index) => (
+          <TestimonialCard
+            key={index}
+            testimonial={testimonial}
+            delay={0.4 + index * 0.1}
+          />
+        ))}
+      </div> */}
+
+      {/* Stats below testimonials */}
+      <FloatingElement delay={0.8}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-4xl mx-auto">
+          {[
+            { value: "150+", label: "Active Members", icon: Users, color: "text-purple-400" },
+            { value: "4.9/5", label: "Average Rating", icon: Star, color: "text-yellow-400" },
+            { value: "50+", label: "Projects in Building", icon: Code2, color: "text-blue-400" },
+            { value: "95%", label: "Would Recommend", icon: TrendingUp, color: "text-green-400" },
+          ].map((stat, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.05 }}
+              className="text-center p-6 rounded-2xl bg-neutral-900/40 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer group"
+            >
+              <stat.icon className={`w-8 h-8 ${stat.color} mb-3 mx-auto group-hover:scale-110 transition-transform`} />
+              <div className={`text-2xl font-bold ${stat.color} mb-2`}>{stat.value}</div>
+              <div className="text-sm text-neutral-400">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </FloatingElement>
+    </section>
+  );
+};
 
 const TimelineContent = React.memo(({ ev }: { ev: any }) => (
   <motion.div
@@ -355,6 +579,9 @@ const Events = () => {
           ))}
         </div>
       </section>
+
+      {/* TESTIMONIALS SECTION */}
+      <TestimonialsGrid />
 
       {/* ENHANCED TIMELINE SECTION */}
       <section className="max-w-6xl mx-auto px-6">

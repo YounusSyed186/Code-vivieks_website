@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Lightbulb, ArrowRight, Users, Code, Rocket, Star, TrendingUp, Calendar, BookOpen, ExternalLink } from "lucide-react";
+import { Lightbulb, ArrowRight, Users, Code, Rocket, Star, TrendingUp, Calendar, BookOpen, ExternalLink, Shield, Zap, Heart, Target } from "lucide-react";
 import heroImage from "@/assets/homeImg.png";
 import { useState, useEffect, useRef } from "react";
 import { clubInfo } from "@/data/content";
@@ -11,6 +11,9 @@ const Hero = () => {
   const [activeEvent, setActiveEvent] = useState(0);
   const navigate = useNavigate();
   const heroRef = useRef<HTMLDivElement>(null);
+  const whyChooseRef = useRef<HTMLDivElement>(null);
+  const eventsRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsVisible(true);
@@ -20,7 +23,28 @@ const Hero = () => {
       setActiveEvent((prev) => (prev + 1) % clubInfo.events.featured.length);
     }, 5000);
 
-    return () => clearInterval(eventInterval);
+    // Intersection Observer for smooth scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in-up');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections for scroll animations
+    const sections = document.querySelectorAll('.scroll-section');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      clearInterval(eventInterval);
+      observer.disconnect();
+    };
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -50,6 +74,58 @@ const Hero = () => {
     console.log(`Register for event: ${clubInfo.events.featured[eventIndex].title}`);
     // Add registration logic here
   };
+
+  const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement>) => {
+    sectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+
+  const whyChoosePoints = [
+    {
+      icon: Users,
+      title: "Supportive Community",
+      description: "Join 150+ developers who collaborate, learn, and grow together in a supportive environment.",
+      color: "text-blue-400",
+      bgColor: "bg-blue-400/10"
+    },
+    {
+      icon: Rocket,
+      title: "Real-World Projects",
+      description: "Work on meaningful projects that solve real problems and build your portfolio with industry-relevant experience.",
+      color: "text-purple-400",
+      bgColor: "bg-purple-400/10"
+    },
+    {
+      icon: BookOpen,
+      title: "Expert Mentorship",
+      description: "Learn from experienced developers and industry professionals who guide you through your coding journey.",
+      color: "text-green-400",
+      bgColor: "bg-green-400/10"
+    },
+    {
+      icon: Target,
+      title: "Career Focused",
+      description: "Get prepared for internships and jobs with resume reviews, interview prep, and networking opportunities.",
+      color: "text-orange-400",
+      bgColor: "bg-orange-400/10"
+    },
+    {
+      icon: Zap,
+      title: "Cutting-Edge Tech",
+      description: "Stay ahead of the curve by working with the latest technologies and frameworks used in the industry.",
+      color: "text-yellow-400",
+      bgColor: "bg-yellow-400/10"
+    },
+    {
+      icon: Heart,
+      title: "Passion Driven",
+      description: "Be part of a community that's genuinely passionate about coding, innovation, and making an impact.",
+      color: "text-red-400",
+      bgColor: "bg-red-400/10"
+    }
+  ];
 
   return (
     <div
@@ -87,7 +163,7 @@ const Hero = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-between pt-16 px-4 sm:px-6 relative overflow-hidden">
+      <section className="min-h-screen flex items-center justify-between pt-16 px-4 sm:px-6 relative overflow-hidden scroll-section">
         <div className="container mx-auto grid lg:grid-cols-2 gap-10 lg:gap-20 items-center relative z-10 w-full max-w-7xl">
 
           {/* Left side - Content */}
@@ -145,11 +221,11 @@ const Hero = () => {
               <Button
                 size="lg"
                 variant="outline"
-                onClick={handleExploreProjects}
+                onClick={() => scrollToSection(whyChooseRef)}
                 className="border-2 border-primary text-primary hover:bg-primary/10 px-6 sm:px-8 py-3 text-base sm:text-lg font-semibold transition-all duration-300 hover:scale-105"
               >
                 <Code className="mr-2 w-5 h-5" />
-                Explore Projects
+                Why Choose Us
               </Button>
             </div>
 
@@ -177,11 +253,11 @@ const Hero = () => {
             className={`relative transition-all duration-1000 ${isVisible ? "animate-fade-in-up" : "opacity-0 translate-y-10"
               }`}
           >
-            <div className="relative">
+            <div className="relative group">
               <img
                 src={heroImage}
                 alt="Coder silhouette with colorful paint splash"
-                className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto drop-shadow-2xl"
+                className="w-full max-w-md lg:max-w-lg xl:max-w-xl mx-auto drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-700"
               />
 
               {/* Floating elements with hover effects */}
@@ -204,7 +280,6 @@ const Hero = () => {
         </div>
 
         {/* Floating interactive elements */}
-
         <div className="absolute bottom-8 right-4 lg:right-12 lg:bottom-12">
           <div
             className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-primary/20 flex items-center justify-center pulse-glow hover:scale-110 hover:bg-primary/30 transition-all duration-600 cursor-pointer"
@@ -215,7 +290,10 @@ const Hero = () => {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 hidden lg:block">
+        <div 
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 hidden lg:block cursor-pointer"
+          onClick={() => scrollToSection(whyChooseRef)}
+        >
           <div className="animate-bounce">
             <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center">
               <div className="w-1 h-3 bg-primary/70 rounded-full mt-2 animate-pulse"></div>
@@ -224,8 +302,75 @@ const Hero = () => {
         </div>
       </section>
 
+      {/* Why Choose Us Section */}
+      <section 
+        ref={whyChooseRef} 
+        className="py-16 lg:py-20 px-4 sm:px-6 relative overflow-hidden scroll-section"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
+        
+        <div className="container mx-auto relative z-10">
+          <div className="text-center mb-12 lg:mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Why Choose <span className="gradient-text bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Our Community</span>?
+            </h2>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
+              We're more than just a coding club - we're a launchpad for your tech career with everything you need to succeed
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+            {whyChoosePoints.map((point, index) => (
+              <div
+                key={index}
+                className="group p-6 lg:p-8 rounded-2xl bg-background/80 backdrop-blur-sm border hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer scroll-section"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className={`w-12 h-12 ${point.bgColor} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <point.icon className={`w-6 h-6 ${point.color}`} />
+                </div>
+                
+                <h3 className="text-xl lg:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                  {point.title}
+                </h3>
+                
+                <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors">
+                  {point.description}
+                </p>
+
+                {/* Hover effect line */}
+                <div className="w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 mt-4 group-hover:w-full transition-all duration-500" />
+              </div>
+            ))}
+          </div>
+
+          {/* Additional CTA */}
+          <div className="text-center mt-12 lg:mt-16">
+            <div className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 lg:p-12 border shadow-lg">
+              <h3 className="text-2xl lg:text-3xl font-bold mb-4">
+                Ready to Transform Your Coding Journey?
+              </h3>
+              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                Join our community today and get access to all these benefits and more
+              </p>
+              <Button
+                size="lg"
+                onClick={handleJoinCommunity}
+                className="bg-primary hover:bg-primary/90 px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                <Rocket className="mr-2 w-5 h-5" />
+                Start Your Journey
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Events Section */}
-      <section className="py-16 lg:py-20 px-4 sm:px-6 bg-muted/30 relative overflow-hidden">
+      <section 
+        ref={eventsRef}
+        className="py-16 lg:py-20 px-4 sm:px-6 bg-muted/30 relative overflow-hidden scroll-section"
+      >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/10 to-transparent" />
 
         <div className="container mx-auto relative z-10">
@@ -299,7 +444,8 @@ const Hero = () => {
             {clubInfo.events.featured.map((event, index) => (
               <div
                 key={index}
-                className="bg-background rounded-2xl p-6 lg:p-8 shadow-lg border hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer"
+                className="bg-background rounded-2xl p-6 lg:p-8 shadow-lg border hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-section"
+                style={{ animationDelay: `${index * 150}ms` }}
                 onMouseEnter={() => setActiveEvent(index)}
               >
                 <div className="flex items-start justify-between mb-4">
@@ -353,10 +499,13 @@ const Hero = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 lg:py-20 px-4 sm:px-6 relative overflow-hidden">
+      <section 
+        ref={ctaRef}
+        className="py-16 lg:py-20 px-4 sm:px-6 relative overflow-hidden scroll-section"
+      >
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-500/5 to-cyan-500/5" />
         <div className="container mx-auto text-center relative z-10 max-w-4xl">
-          <div className="bg-background/80 backdrop-blur-sm rounded-3xl p-8 lg:p-12 shadow-2xl border">
+          <div className="bg-background/80 backdrop-blur-sm rounded-3xl p-8 lg:p-12 shadow-2xl border transform hover:scale-[1.02] transition-transform duration-500">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
               Ready to Start Your <span className="gradient-text bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent">Coding Journey</span>?
             </h2>
