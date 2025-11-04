@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Github, Linkedin, Instagram, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface NavbarProps {
-  activeSection: string;
-  onNavigate: (section: string) => void;
-}
-
-const Navbar = ({ activeSection, onNavigate }: NavbarProps) => {
+const Navbar = () => {
+  const location = useLocation();
+  
   const navItems = [
-    { id: "home", label: "Home" },
-    { id: "about", label: "About" },
-    { id: "teams", label: "Teams" },
-    { id: "events", label: "Events" },
-    { id: "projects", label: "Projects" },
-    { id: "contact", label: "Contact" },
+    { path: "/", label: "Home" },
+    { path: "/about", label: "About" },
+    { path: "/teams", label: "Teams" },
+    { path: "/events", label: "Events" },
+    { path: "/projects", label: "Projects" },
+    { path: "/contact", label: "Contact" },
   ];
 
   const socialLinks = [
@@ -38,22 +35,25 @@ const Navbar = ({ activeSection, onNavigate }: NavbarProps) => {
 
           {/* Nav Items */}
           <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => onNavigate(item.id)}
-                className={`relative text-sm font-medium transition-colors hover:text-primary group ${
-                  activeSection === item.id ? "text-primary" : "text-foreground"
-                }`}
-              >
-                {item.label}
-                <span
-                  className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
-                    activeSection === item.id ? "w-full" : "w-0 group-hover:w-full"
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`relative text-sm font-medium transition-colors hover:text-primary group ${
+                    isActive ? "text-primary" : "text-foreground"
                   }`}
-                />
-              </button>
-            ))}
+                >
+                  {item.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </Link>
+              );
+            })}
           </div>
 
           {/* Social Links */}
