@@ -266,7 +266,7 @@ const About = () => {
               </div>
             </div>
             <div className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-background border border-border rounded-lg md:rounded-2xl p-3 md:p-4 lg:p-6 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <div className="text-xl md:text-2xl lg:text-3xl font-black text-primary">2023</div>
+              <div className="text-xl md:text-2xl lg:text-3xl font-black text-primary">2025</div>
               <div className="text-xs md:text-sm text-muted-foreground">Community Founded</div>
             </div>
           </div>
@@ -490,12 +490,25 @@ const About = () => {
             </div>
 
             <div className="space-y-6">
-              <h4 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Success Stories</h4>
+              <h4 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Messages & Blessings</h4>
+
               <div className="space-y-4">
                 {[
-                  { quote: "CODE VIVEKS transformed my learning journey. From zero coding experience to building full-stack applications in 6 months!", author: "Sarah M., Web Development Track" },
-                  { quote: "The collaborative projects and mentor guidance helped me land my first internship at a tech startup.", author: "Alex K., AI/ML Division" },
-                  { quote: "I went from knowing basic Python to contributing to open source and winning hackathons. This community is incredible!", author: "Mike T., Cybersecurity Division" }
+                  {
+                    quote:
+                      "I appreciate the efforts of CODE VIVEKS in providing students an environment of innovation and collaboration. Keep growing, keep creating, and let your light shine.",
+                    author: "Raguraj Sir, Principal"
+                  },
+                  {
+                    quote:
+                      "Proud to see students stepping forward with confidence, dedication, and leadership. May your journey in technology be filled with learning and great achievements.",
+                    author: "Joshna Ma’am"
+                  },
+                  {
+                    quote:
+                      "Wishing the brilliant minds of CODE VIVEKS all the very best. Dream big, take action, and continue inspiring others.",
+                    author: "Team CODE VIVEKS"
+                  }
                 ].map((story, index) => (
                   <div
                     key={index}
@@ -526,6 +539,7 @@ const About = () => {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
