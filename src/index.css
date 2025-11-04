@@ -5,6 +5,9 @@
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
+html, body {
+  overflow-x: hidden !important;
+}
 
 
 
@@ -136,4 +139,8 @@ All colors MUST be HSL.
 /* Hide scrollbar for Firefox */
 .no-scrollbar {
   scrollbar-width: none;
+}
+/* Prevent navbar content overflow on small screens */
+nav, .navbar, .nav-wrapper {
+  overflow-x: clip !important;
 }

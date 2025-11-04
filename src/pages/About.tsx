@@ -3,7 +3,7 @@ import PageTransition from "@/components/PageTransition";
 
 const About = () => {
   return (
-    <div className="h-screen overflow-hidden"> {/* ← add this wrapper */}
+    <div > {/* ← add this wrapper */}
       <PageTransition>
         <AboutSection />
       </PageTransition>

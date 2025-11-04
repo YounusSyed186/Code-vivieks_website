@@ -1,49 +1,60 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { ReactNode } from "react";
+import { motion } from "framer-motion";
+import { ReactNode, useMemo } from "react";
 
 interface PageTransitionProps {
   children: ReactNode;
 }
 
 const PageTransition = ({ children }: PageTransitionProps) => {
+  const direction = useMemo(() => (Math.random() > 0.5 ? 1 : -1), []);
+
   return (
-    <AnimatePresence mode="wait">
-      {/* Sliding Overlay Transition */}
+    <>
+      {/* Sliding Overlay */}
       <motion.div
+        key="overlay"
         className="fixed inset-0 z-[999] pointer-events-none"
-        initial={{ x: "100%" }}
-        animate={{ x: "-100%" }}
-        exit={{ x: "-100%" }}
+        initial={{ x: `${100 * direction}%` }}
+        animate={{ x: `${-100 * direction}%` }}
+        exit={{ x: `${-100 * direction}%` }}
         transition={{
-          duration: 1.1,
+          duration: 0.6, // ⚡ faster
           ease: [0.83, 0, 0.17, 1],
         }}
       >
-        {/* Multi-Layer Depth */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#6a11cb] via-[#2575fc] to-[#ff5f6d]" />
         <motion.div
           className="absolute inset-0 bg-white/20 backdrop-blur-[6px] mix-blend-overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.1, duration: 0.6 }}
+          transition={{ delay: 0.05, duration: 0.4 }} // ⚡ faster blur overlay
         />
       </motion.div>
 
-      {/* Page Content Entrance Animation */}
+      {/* Blurred Page Content During Transition */}
       <motion.div
-        className="relative"
-        initial={{ opacity: 0, scale: 0.98, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.98, y: -20 }}
+        key="content-blur"
+        initial={{ filter: "blur(14px)" }}
+        animate={{ filter: "blur(0px)" }}
+        exit={{ filter: "blur(14px)" }}
         transition={{
-          duration: 0.6,
-          ease: [0.43, 0.13, 0.23, 0.96],
+          duration: 0.6, // ⚡ synced faster
+          ease: [0.83, 0, 0.17, 1],
         }}
+        className="min-h-screen"
       >
-        {children}
+        <motion.div
+          key="content"
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -25 }}
+          transition={{ duration: 0.35 }} // ⚡ quicker fade
+        >
+          {children}
+        </motion.div>
       </motion.div>
-    </AnimatePresence>
+    </>
   );
 };
 
