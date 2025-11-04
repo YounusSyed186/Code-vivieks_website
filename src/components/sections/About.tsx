@@ -502,7 +502,7 @@ const About = () => {
                   {
                     quote:
                       "Proud to see students stepping forward with confidence, dedication, and leadership. May your journey in technology be filled with learning and great achievements.",
-                    author: "Joshna Ma’am"
+                    author: "Jyotsna Ma’am"
                   },
                   {
                     quote:
