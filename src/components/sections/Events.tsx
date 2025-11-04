@@ -1,89 +1,91 @@
-import { Calendar, Code, Rocket, Users } from "lucide-react";
+"use client";
+
+import React from "react";
+import { Timeline } from "@/components/ui/timeline";
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import { clubInfo } from "@/data/content";
+
+// Memoized timeline item content to prevent unnecessary re-renders
+const TimelineContent = React.memo(({ ev }: { ev: any }) => (
+  <div className="space-y-2">
+    <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+      {ev.title}
+    </h3>
+    <p className="font-medium bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+      {ev.category}
+    </p>
+    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      {ev.location}
+    </p>
+  </div>
+));
+
+TimelineContent.displayName = "TimelineContent";
+
+// Memoized bento grid header
+const BentoHeader = React.memo(({ section }: { section: string }) => (
+  <div className="text-xs uppercase tracking-wide text-purple-300/80">
+    {section}
+  </div>
+));
+
+BentoHeader.displayName = "BentoHeader";
 
 const Events = () => {
-  const events = [
-    {
-      icon: Code,
-      title: "Hackathons",
-      description: "24-hour coding marathons to build innovative solutions",
-      date: "Quarterly",
-      color: "text-cyan-400",
-    },
-    {
-      icon: Users,
-      title: "Bootcamps",
-      description: "Intensive training sessions on cutting-edge technologies",
-      date: "Monthly",
-      color: "text-blue-400",
-    },
-    {
-      icon: Rocket,
-      title: "Workshops",
-      description: "Hands-on sessions with industry experts",
-      date: "Bi-weekly",
-      color: "text-purple-400",
-    },
-    {
-      icon: Calendar,
-      title: "Open-Source Month",
-      description: "Contributing to global open-source projects",
-      date: "Annually",
-      color: "text-green-400",
-    },
-  ];
+  // Pre-compute timeline data with useMemo
+  const timelineData = React.useMemo(() => 
+    clubInfo.events.timeline.map((ev) => ({
+      title: ev.date,
+      content: <TimelineContent ev={ev} />,
+    }))
+  , []);
+
+  // Pre-compute bento items with useMemo
+  const bentoItems = React.useMemo(() => {
+    const eventSections = [
+      { label: "Weekly", list: clubInfo.events.weekly },
+      { label: "Bi-Weekly", list: clubInfo.events.biweekly },
+      { label: "Monthly", list: clubInfo.events.monthly },
+      { label: "Semester", list: clubInfo.events.semester },
+      { label: "Annual", list: clubInfo.events.annual },
+    ];
+
+    return eventSections
+      .filter((sec) => sec.list?.length)
+      .flatMap((sec) =>
+        sec.list.map((event) => ({
+          section: sec.label,
+          name: event.name,
+          description: event.description,
+        }))
+      );
+  }, []);
 
   return (
-    <section className="min-h-screen flex items-center justify-center py-24 px-6">
-      <div className="container mx-auto">
-        <div className="space-y-16">
-          {/* Heading */}
-          <div className="text-center animate-fade-in-up">
-            <h2 className="text-5xl md:text-6xl font-black mb-4">
-              Featured <span className="gradient-text">Events</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Join us in our journey of learning, building, and growing together
-            </p>
-          </div>
+    <div className="py-10">
+      {/* TIMELINE SECTION */}
+      <Timeline data={timelineData} />
 
-          {/* Timeline */}
-          <div className="relative">
-            {/* Connection line */}
-            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-30 -translate-y-1/2" />
-
-            {/* Events */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-              {events.map((event, index) => (
-                <div
-                  key={index}
-                  className="glass-effect p-6 rounded-2xl border border-border/50 hover:border-primary/50 transition-all duration-300 group cursor-pointer animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.15}s` }}
-                >
-                  {/* Icon */}
-                  <div className="mb-6 relative">
-                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                      <event.icon className={`w-8 h-8 ${event.color}`} />
-                    </div>
-                    {/* Connector dot */}
-                    <div className="hidden lg:block absolute top-1/2 -right-8 w-4 h-4 rounded-full bg-primary border-4 border-background -translate-y-1/2" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="space-y-2">
-                    <div className="text-sm text-primary font-semibold">{event.date}</div>
-                    <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
-                      {event.title}
-                    </h3>
-                    <p className="text-muted-foreground">{event.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      {/* BENTO GRID SECTION */}
+      <section className="mt-16">
+        <h2 className="mb-6 text-3xl font-bold text-center bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+          Additional Club Activities
+        </h2>
+        
+        <BentoGrid className="mt-8">
+          {bentoItems.map((item, index) => (
+            <BentoGridItem
+              key={`${item.section}-${item.name}-${index}`}
+              title={item.name}
+              description={item.description}
+              className="hover:shadow-purple-500/20 transition-shadow duration-300"
+              header={<BentoHeader section={item.section} />}
+            />
+          ))}
+        </BentoGrid>
+      </section>
+    </div>
   );
 };
 
-export default Events;
+export default React.memo(Events);

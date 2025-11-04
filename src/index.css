@@ -6,6 +6,8 @@
 All colors MUST be HSL.
 */
 
+
+
 @layer base {
   :root {
     --background: 0 0% 6%;
@@ -126,4 +128,12 @@ All colors MUST be HSL.
   .pulse-glow {
     animation: pulse-glow 3s ease-in-out infinite;
   }
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.no-scrollbar {
+  scrollbar-width: none;
 }

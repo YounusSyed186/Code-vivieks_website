@@ -64,9 +64,17 @@ const Projects = () => {
                 className="glass-effect p-6 group cursor-pointer hover:scale-105 transition-all duration-300 animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {/* Project Image Placeholder */}
-                <div className={`w-full h-48 rounded-xl bg-gradient-to-br ${project.gradient} mb-6 flex items-center justify-center relative overflow-hidden`}>
-                  <div className="absolute inset-0 bg-background/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                {/* Project Image with Coming Soon Overlay */}
+                <div
+                  className={`w-full h-48 rounded-xl bg-gradient-to-br ${project.gradient} mb-6 flex items-center justify-center relative overflow-hidden group`}
+                >
+                  {/* Coming Soon Blur Overlay */}
+                  <div className="absolute inset-0 backdrop-blur-md bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center text-white font-semibold text-lg z-20">
+                    Coming Soon
+                  </div>
+
+                  {/* Hover Buttons */}
+                  <div className="absolute inset-0 bg-background/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 z-10">
                     <Button
                       size="icon"
                       variant="ghost"
@@ -82,6 +90,7 @@ const Projects = () => {
                       <ExternalLink className="w-5 h-5" />
                     </Button>
                   </div>
+
                   <div className="text-6xl opacity-20 group-hover:scale-110 transition-transform">
                     💻
                   </div>
@@ -92,9 +101,7 @@ const Projects = () => {
                   <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-muted-foreground">
-                    {project.description}
-                  </p>
+                  <p className="text-muted-foreground">{project.description}</p>
 
                   {/* Tech Stack */}
                   <div className="flex flex-wrap gap-2">
