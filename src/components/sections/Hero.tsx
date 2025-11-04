@@ -204,22 +204,10 @@ const Hero = () => {
         </div>
 
         {/* Floating interactive elements */}
-        <div className="absolute bottom-8 left-4 lg:left-12 lg:bottom-12">
-          <div className="relative w-24 h-24 lg:w-32 lg:h-32 animate-rotate hover:scale-110 transition-transform duration-300">
-            <div
-              className="absolute inset-0 rounded-full border-2 border-primary/30 flex items-center justify-center hover:border-primary/60 hover:bg-primary/5 transition-all cursor-pointer"
-              onClick={handleJoinCommunity}
-            >
-              <span className="text-xs font-bold text-center text-primary">
-                JOIN<br />US
-              </span>
-            </div>
-          </div>
-        </div>
 
         <div className="absolute bottom-8 right-4 lg:right-12 lg:bottom-12">
           <div
-            className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-primary/20 flex items-center justify-center pulse-glow hover:scale-110 hover:bg-primary/30 transition-all duration-300 cursor-pointer"
+            className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-primary/20 flex items-center justify-center pulse-glow hover:scale-110 hover:bg-primary/30 transition-all duration-600 cursor-pointer"
             onClick={() => navigate("/about")}
           >
             <Lightbulb className="w-8 h-8 lg:w-10 lg:h-10 text-primary" />
