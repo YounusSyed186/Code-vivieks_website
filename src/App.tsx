@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PageTransition from "@/components/PageTransition";
+import ScrollToTop from "./components/ScrollToTop";
 
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
         <div className="min-h-screen bg-background flex flex-col">
           <Navbar />
           <main className="flex-1">
+            <ScrollToTop />
             <AnimatedRoutes />
           </main>
           <Footer />
